@@ -21,8 +21,8 @@ ScriptedImporter:
   predefinedResolutionIndex: 1
   targetResolution: 1080
   resolutionMultiplier: 1
-  stepDistance: 5
-  samplingStepDistance: 100
+  stepDistance: 0.1
+  samplingStepDistance: 3
   maxCordDeviationEnabled: 0
   maxCordDeviation: 1
   maxTangentAngleEnabled: 0
@@ -39,9 +39,9 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: 
+      name: LogotypeSprite
       originalName: 
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.4993071, y: 0.49986023}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -49,7 +49,7 @@ ScriptedImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 0
-        height: 0
+        width: 307
+        height: 59
       spriteID: 824224f8011374119964a2dbaacbb665
     PhysicsOutlines: []
