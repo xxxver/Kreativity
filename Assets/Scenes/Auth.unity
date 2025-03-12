@@ -842,6 +842,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118732102}
   m_CullTransparentMesh: 1
+--- !u!1 &161467025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 161467027}
+  - component: {fileID: 161467026}
+  m_Layer: 0
+  m_Name: auth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &161467026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161467025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0b5ae8acdb1bc47a883c1cd0b0959a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emailInputField: {fileID: 837713822}
+  passwordInputField: {fileID: 1780874510}
+  loginButton: {fileID: 226536581}
+--- !u!4 &161467027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161467025}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.23174767, y: -1.5432968, z: 2.5339494}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &183350290
 GameObject:
   m_ObjectHideFlags: 0
@@ -2275,8 +2322,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1053675230}
-  - {fileID: 965442268}
   - {fileID: 1432875459}
+  - {fileID: 965442268}
   m_Father: {fileID: 307752541}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3154,7 +3201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1140821532}
   m_Layer: 5
-  m_Name: input 2
+  m_Name: password
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3369,7 +3416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1204558261}
   m_Layer: 5
-  m_Name: input
+  m_Name: email
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4775,7 +4822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 109.09, y: -15.97}
+  m_AnchoredPosition: {x: 109.09, y: -15.970001}
   m_SizeDelta: {x: 218.17, y: 31.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1700726166
@@ -5926,3 +5973,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 230884200}
   - {fileID: 307752541}
+  - {fileID: 161467027}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "578089062478",
+    "project_id": "kreative-69b8b",
+    "storage_bucket": "kreative-69b8b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578089062478:android:7a0a49d82dfba53f38f31f",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.com.unity.template.mobile2D"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE_xDaQmnq5zzjx-7FNhK5kMGbgil57-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
