@@ -1,0 +1,29 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PanelManager : MonoBehaviour
+{
+    public GameObject levelPanel;
+    public GameObject theoryPanel;
+    public Button levelButton;
+    public Button theoryButton;
+
+    void Start()
+    {
+        levelButton.onClick.AddListener(ShowLevelPanel);
+        theoryButton.onClick.AddListener(ShowTheoryPanel);
+        theoryPanel.SetActive(false); // Изначально скрываем панель теории
+    }
+
+    void ShowLevelPanel()
+    {
+        levelPanel.SetActive(true);
+        theoryPanel.SetActive(false);
+    }
+
+    void ShowTheoryPanel()
+    {
+        theoryPanel.SetActive(true);
+        levelPanel.SetActive(false);
+    }
+}

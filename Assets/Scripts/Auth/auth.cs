@@ -5,6 +5,7 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -99,16 +100,14 @@ public class FirebaseAuthManager : MonoBehaviour
             var loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
             await loginTask;
 
-            if (loginTask.IsCompleted)
+            if (loginTask.IsCompletedSuccessfully)
             {
-                if (loginTask.IsFaulted)
-                {
-                    Debug.LogError($"[Ошибка] Ошибка входа: {loginTask.Exception}");
-                }
-                else
-                {
-                    Debug.Log($"[Успех] Успешный вход! Пользователь: {user?.Email}");
-                }
+                Debug.Log($"[Успех] Успешный вход! Пользователь: {auth.CurrentUser.Email}");
+                SceneManager.LoadScene("Home"); // Переход на главную сцену
+            }
+            else
+            {
+                Debug.LogError($"[Ошибка] Ошибка входа: {loginTask.Exception}");
             }
         }
         catch (FirebaseException ex)
