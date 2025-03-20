@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragAndDrop1 : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public RectTransform zone;
     public Image[] imagesToShow;
@@ -187,7 +187,7 @@ public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void GoToLevel1()
     {
         // Переход на сцену "Level1-1"
-        SceneManager.LoadScene("Level1-1");
+        SceneManager.LoadScene("Home");
     }
 
     private void GoToHome()

@@ -1868,7 +1868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.022000002, y: 0.541}
   m_AnchorMax: {x: 0.97543776, y: 1}
-  m_AnchoredPosition: {x: -1.0267334, y: 233.0412}
+  m_AnchoredPosition: {x: -1.0267334, y: 233.04121}
   m_SizeDelta: {x: 1829.022, y: 29.568207}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &319825972
@@ -2900,6 +2900,7 @@ MonoBehaviour:
   theoryPanel: {fileID: 1817042958}
   levelButton: {fileID: 157311298}
   theoryButton: {fileID: 1502747026}
+  progressBar: {fileID: 1193476932}
 --- !u!4 &566279835
 Transform:
   m_ObjectHideFlags: 0
@@ -3893,7 +3894,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.022000002, y: 0}
   m_AnchorMax: {x: 0.98220766, y: 0.22600001}
-  m_AnchoredPosition: {x: 1.0227051, y: -47.478275}
+  m_AnchoredPosition: {x: 1.0227051, y: -47.47827}
   m_SizeDelta: {x: 1828.9884, y: 149.08911}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &784117553
@@ -6207,7 +6208,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.62, y: 0}
   m_AnchorMax: {x: 0.6965757, y: 1}
-  m_AnchoredPosition: {x: -169.99998, y: 0.000015258789}
+  m_AnchoredPosition: {x: -170, y: 0.000015258789}
   m_SizeDelta: {x: 54.01, y: 0.000030518}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1174670725
@@ -8389,6 +8390,52 @@ RectTransform:
   m_AnchoredPosition: {x: 42, y: 140}
   m_SizeDelta: {x: 29.274902, y: -377.89868}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1826826562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826826564}
+  - component: {fileID: 1826826565}
+  m_Layer: 0
+  m_Name: progressbarManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1826826564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826826562}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.0795467, y: 0.6821954, z: 0.445469}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1826826565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826826562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7808a4a0424e05945a223da1a7a8426f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 1193476932}
+  progressText: {fileID: 1138667047}
 --- !u!1 &1828313341
 GameObject:
   m_ObjectHideFlags: 0
@@ -9670,3 +9717,4 @@ SceneRoots:
   - {fileID: 307752541}
   - {fileID: 566279835}
   - {fileID: 2095147502}
+  - {fileID: 1826826564}

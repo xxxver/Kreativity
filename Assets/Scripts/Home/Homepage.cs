@@ -7,9 +7,15 @@ public class PanelManager : MonoBehaviour
     public GameObject theoryPanel;
     public Button levelButton;
     public Button theoryButton;
+    public Slider progressBar;  // Прогрессбар на главной сцене
 
     void Start()
     {
+
+         float progress = PlayerPrefs.GetFloat("LevelProgress", 0f);
+        progressBar.value = progress;
+
+
         levelButton.onClick.AddListener(ShowLevelPanel);
         theoryButton.onClick.AddListener(ShowTheoryPanel);
         theoryPanel.SetActive(false); // Изначально скрываем панель теории

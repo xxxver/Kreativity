@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Manager : MonoBehaviour
+public class Manager1 : MonoBehaviour
 {
     // Панель и кнопки
     public GameObject panel;  // Панель, которую нужно открыть/закрыть
-    public Button actionButton; // Кнопка для перехода на сцену "LevelTheory1"
+    public Button actionButton; // Кнопка для перехода на сцену "PanelLevel1"
     public Button extraOpenButton1; // Кнопка для открытия панели
     public Button extraOpenButton2; // Кнопка для открытия панели
     public Button closeButton; // Кнопка для закрытия панели
@@ -18,18 +18,18 @@ public class Manager : MonoBehaviour
         panel.SetActive(false);
 
         // Привязываем методы к кнопкам
-        actionButton.onClick.AddListener(GoToLevelTheory1);  // Переход на сцену "LevelTheory1"
+        actionButton.onClick.AddListener(GoToLevelTheory1);  // Переход на сцену "PanelLevel1"
         extraOpenButton1.onClick.AddListener(OpenPanel);     // Открыть панель
         extraOpenButton2.onClick.AddListener(OpenPanel);     // Открыть панель
         closeButton.onClick.AddListener(ClosePanel);         // Закрыть панель
         confirmButton.onClick.AddListener(ConfirmAndGoHome); // Переход на сцену "Home"
     }
 
-    // Метод для перехода на сцену "LevelTheory1"
+    // Метод для перехода на сцену "PanelLevel1"
     private void GoToLevelTheory1()
     {
         // Переход на сцену "LevelTheory1" без открытия панели
-        SceneManager.LoadScene("LevelTheory1");
+        SceneManager.LoadScene("Level1");
     }
 
     // Метод для открытия панели
