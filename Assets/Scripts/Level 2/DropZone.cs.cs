@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class TabChecker : MonoBehaviour
 {
@@ -8,7 +9,9 @@ public class TabChecker : MonoBehaviour
     public Image tabImage;
     public Sprite correctSprite;
     public Sprite wrongSprite;
-    public GameObject descriptorPanel;
+    public Sprite defaultSprite;  // Дефолтный спрайт
+    public GameObject winPanel;  // WinPanel
+    public GameObject descriptor;  // Дескриптор
     public Button confirmButton;
 
     private PaletteDrag currentPalette;
@@ -21,7 +24,8 @@ public class TabChecker : MonoBehaviour
     private void Start()
     {
         confirmButton.onClick.AddListener(Confirm);
-        descriptorPanel.SetActive(false);
+        winPanel.SetActive(false); // Скрыть WinPanel изначально
+        descriptor.SetActive(false); // Скрыть дескриптор изначально
     }
 
     public void SetPalette(PaletteDrag palette)
@@ -38,11 +42,41 @@ public class TabChecker : MonoBehaviour
     {
         if (currentPalette == null) return;
 
-        tabImage.sprite = currentPalette.isCorrectPalette ? correctSprite : wrongSprite;
-        descriptorPanel.SetActive(true);
+        if (currentPalette.isCorrectPalette)
+        {
+            tabImage.sprite = correctSprite; // Успешный спрайт
+            StartCoroutine(ShowWinPanelAfterDelay()); // Запускаем корутину с задержкой
+        }
+        else
+        {
+            tabImage.sprite = wrongSprite; // Ошибочный спрайт
+            descriptor.SetActive(true); // Показываем дескриптор
 
-        // Удалить палитру из таба
-        Destroy(currentPalette.gameObject);
-        currentPalette = null;
+            // Возвращаем палитру на стартовую позицию
+            currentPalette.ReturnToStart();
+
+            // Запускаем корутину для скрытия дескриптора и восстановления спрайта
+            StartCoroutine(HandleWrongPalette());
+        }
+
+        currentPalette = null; // Убираем ссылку на текущую палитру
+    }
+
+    private IEnumerator ShowWinPanelAfterDelay()
+    {
+        yield return new WaitForSeconds(2f); // Задержка 2 секунды
+        winPanel.SetActive(true); // Показываем WinPanel
+    }
+
+    private IEnumerator HandleWrongPalette()
+    {
+        // Ждем 3 секунды
+        yield return new WaitForSeconds(3f);
+
+        // После 3 секунд меняем спрайт обратно на дефолтный
+        tabImage.sprite = defaultSprite;
+
+        // Скрываем дескриптор
+        descriptor.SetActive(false);
     }
 }
