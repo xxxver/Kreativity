@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TabChecker : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class TabChecker : MonoBehaviour
     public GameObject descriptor;  // Дескриптор
     public Button confirmButton;
 
+    public Button homeButton;
+    public Button nextLevelButton;
+
     private PaletteDrag currentPalette;
 
     private void Awake()
@@ -23,6 +27,8 @@ public class TabChecker : MonoBehaviour
 
     private void Start()
     {
+        homeButton.onClick.AddListener(GoHome);
+        nextLevelButton.onClick.AddListener(GoToNextLevel);
         confirmButton.onClick.AddListener(Confirm);
         winPanel.SetActive(false); // Скрыть WinPanel изначально
         descriptor.SetActive(false); // Скрыть дескриптор изначально
@@ -78,5 +84,15 @@ public class TabChecker : MonoBehaviour
 
         // Скрываем дескриптор
         descriptor.SetActive(false);
+    }
+    
+      private void GoHome()
+    {
+        SceneManager.LoadScene("Home"); 
+    }
+
+    private void GoToNextLevel()
+    {
+        SceneManager.LoadScene("Level2-1");
     }
 }

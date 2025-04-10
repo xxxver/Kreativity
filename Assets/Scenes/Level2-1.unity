@@ -824,8 +824,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 276302561}
-  - component: {fileID: 276302560}
-  - component: {fileID: 276302562}
+  - component: {fileID: 276302563}
+  - component: {fileID: 276302564}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -833,27 +833,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &276302560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 276302559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c2f27e62d5aabe49af6c915bce32d57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tabImage: {fileID: 1494562360}
-  correctSprite: {fileID: 4889801557154866733, guid: 0f8f479173ce3c3418ff34557d3b0376, type: 3}
-  wrongSprite: {fileID: -8210969264033256650, guid: f6e121dd9f3bfc941bc924287d26b7a4, type: 3}
-  defaultSprite: {fileID: -3575869859246489702, guid: d7dcbd2122fdb234581ad926981e9d3a, type: 3}
-  winPanel: {fileID: 758809556}
-  descriptor: {fileID: 1695177931}
-  confirmButton: {fileID: 1494067633}
-  homeButton: {fileID: 584313342}
-  nextLevelButton: {fileID: 1166292274}
 --- !u!4 &276302561
 Transform:
   m_ObjectHideFlags: 0
@@ -869,7 +848,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &276302562
+--- !u!114 &276302563
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -878,10 +857,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 276302559}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a0911d65e0a05c4fb8e951f116b5230, type: 3}
+  m_Script: {fileID: 11500000, guid: c4ed65802580ca74aa0b9359e77d3e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cancelButton: {fileID: 584313342}
+  tabImage: {fileID: 1494562360}
+  correctSprite: {fileID: 4889801557154866733, guid: 0f8f479173ce3c3418ff34557d3b0376, type: 3}
+  wrongSprite: {fileID: -8210969264033256650, guid: f6e121dd9f3bfc941bc924287d26b7a4, type: 3}
+  defaultSprite: {fileID: -3575869859246489702, guid: d7dcbd2122fdb234581ad926981e9d3a, type: 3}
+  winPanel: {fileID: 758809556}
+  descriptor: {fileID: 1695177931}
+  confirmButton: {fileID: 1494067633}
+  homeButton: {fileID: 584313342}
+  nextLevelButton: {fileID: 1166292274}
+--- !u!114 &276302564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276302559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c115aeba37328f449a08644de36c92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cancelButton: {fileID: 1151019170}
 --- !u!1 &289395020
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,13 +967,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 289395020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 307752540}
-  originalParent: {fileID: 1825852253}
+  originalParent: {fileID: 0}
   originalPosition: {x: 0, y: 0}
-  isCorrectPalette: 1
+  isCorrectPalette: 0
 --- !u!1 &307752537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,7 +1093,7 @@ GameObject:
   - component: {fileID: 422952125}
   - component: {fileID: 422952128}
   - component: {fileID: 422952127}
-  - component: {fileID: 422952126}
+  - component: {fileID: 422952129}
   m_Layer: 5
   m_Name: palette2
   m_TagString: Untagged
@@ -1120,22 +1120,6 @@ RectTransform:
   m_AnchoredPosition: {x: 530, y: 1.1}
   m_SizeDelta: {x: 95.86, y: 73.44}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &422952126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 422952124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 307752540}
-  originalParent: {fileID: 0}
-  originalPosition: {x: 0, y: 0}
-  isCorrectPalette: 0
 --- !u!114 &422952127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,6 +1158,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422952124}
   m_CullTransparentMesh: 1
+--- !u!114 &422952129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422952124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 307752540}
+  originalParent: {fileID: 0}
+  originalPosition: {x: 0, y: 0}
+  isCorrectPalette: 1
 --- !u!1 &443053521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,7 +1351,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 444161001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 307752540}
@@ -2416,7 +2416,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 883213190}
-  - component: {fileID: 883213192}
+  - component: {fileID: 883213191}
   m_Layer: 0
   m_Name: Progress
   m_TagString: Untagged
@@ -2439,7 +2439,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &883213192
+--- !u!114 &883213191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2448,7 +2448,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 883213188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddb34f94b2db8074eb11ba089ade522a, type: 3}
+  m_Script: {fileID: 11500000, guid: 325c4f9bdf1727545a30ab3d1bf7ff3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1350347589}
@@ -2829,7 +2829,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1095335071}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 307752540}
@@ -4182,7 +4182,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1494562357}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58c5ddb4ae6d53543bbb201cd0a9b22c, type: 3}
+  m_Script: {fileID: 11500000, guid: b13eb96e935357c48a5f616d1a8721b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1502747024
@@ -4222,7 +4222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.41227654, y: 0}
   m_AnchorMax: {x: 0.64826834, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000076293945}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -2, y: -49.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1502747026
@@ -4392,7 +4392,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1577392638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 307752540}
@@ -4799,7 +4799,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730365113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac0be7d00a4ddde438268c121b9a3065, type: 3}
+  m_Script: {fileID: 11500000, guid: 553574a93261b124f9c9fd17ab6869b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 307752540}
@@ -5036,7 +5036,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -916045961378760933, guid: 7294bbd1397cae14086b8d942a40057b, type: 3}
+  m_Sprite: {fileID: 8451164511046718129, guid: 2511925ee742a174e9f06892eaef00f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
