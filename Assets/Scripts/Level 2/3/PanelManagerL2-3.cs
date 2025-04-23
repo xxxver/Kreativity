@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections; // Для корутин
+using System.Collections;
 
 public class ManagerL23 : MonoBehaviour
 {
@@ -64,8 +64,5 @@ public class ManagerL23 : MonoBehaviour
         {
             yield return null;  // Ожидаем один кадр
         }
-
-        // После того как панель закрыта, переходим на сцену "Home"
-        // Убираем переход на другую сцену, так как остаемся на текущей
     }
 }
