@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5fae8fc57de4a2640bd7e53978e29098
+guid: 158c1c631a1cd124a914f9738cfd1aa6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2571378613649418156
-    second: roster2-1_0
+      213: 3049097853084886678
+    second: poster3-1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: roster2-1_0
+      name: poster3-1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1751
-        height: 2501
+        width: 1750
+        height: 2500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ca72c91b93f5fa320800000000000000
-      internalID: 2571378613649418156
+      spriteID: 696e782b752905a20800000000000000
+      internalID: 3049097853084886678
       vertices: []
       indices: 
       edges: []
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      roster2-1_0: 2571378613649418156
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
