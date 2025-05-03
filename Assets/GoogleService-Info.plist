@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCgzwDdVao2_8_JRK_wvbF13hhEE1QEUSg</string>
+	<string>AIzaSyD5leccQLayeh4SHeOyT1wLMmugBnuLq28</string>
 	<key>GCM_SENDER_ID</key>
-	<string>578089062478</string>
+	<string>481646973033</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.DefaultCompany.com.unity.template.mobile2D</string>
+	<string>com.DefaultCompany.Kreativity</string>
 	<key>PROJECT_ID</key>
-	<string>kreative-69b8b</string>
+	<string>kreavititynewde</string>
 	<key>STORAGE_BUCKET</key>
-	<string>kreative-69b8b.firebasestorage.app</string>
+	<string>kreavititynewde.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:578089062478:ios:637a7734972e5d9838f31f</string>
+	<string>1:481646973033:ios:f9ea47452ae0bacf4a12f8</string>
 </dict>
 </plist>
