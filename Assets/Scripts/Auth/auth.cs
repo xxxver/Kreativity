@@ -9,9 +9,18 @@ using UnityEngine.SceneManagement;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
+    [Header("UI поля")]
     public TMP_InputField emailInputField;
     public TMP_InputField passwordInputField;
     public Button loginButton;
+
+    [Header("Тексты ошибок")]
+    public TMP_Text emailErrorLabel;
+    public TMP_Text passwordErrorLabel;
+
+    [Header("Иконки ошибок")]
+    public GameObject emailErrorIcon;
+    public GameObject passwordErrorIcon;
 
     private FirebaseAuth auth;
     private FirebaseUser user;
@@ -22,24 +31,17 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         loginButton.onClick.AddListener(LoginButtonClick);
         SetUIInteractable(false);
+        HideErrorUI();
         initCoroutine = StartCoroutine(InitializeFirebaseWithTimeout());
     }
 
     IEnumerator InitializeFirebaseWithTimeout()
     {
-        Debug.Log("[Инициализация] Запуск процесса инициализации Firebase");
-        
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
         yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
-        if (dependencyTask.Exception != null)
-        {
-            Debug.LogError($"[Ошибка] Ошибка зависимостей: {dependencyTask.Exception}");
-            yield break;
-        }
+        if (dependencyTask.Exception != null) yield break;
 
-        Debug.Log("[Инициализация] Зависимости проверены");
-        
         var initializationTask = InitializeFirebaseAsync();
         float timeout = 10f;
         float elapsedTime = 0f;
@@ -47,33 +49,21 @@ public class FirebaseAuthManager : MonoBehaviour
         while (!initializationTask.IsCompleted && elapsedTime < timeout)
         {
             elapsedTime += Time.deltaTime;
-            if (Mathf.FloorToInt(elapsedTime) % 2 == 0)
-            {
-                Debug.Log($"[Инициализация] Ожидание... {Mathf.FloorToInt(timeout - elapsedTime)} сек.");
-            }
             yield return null;
         }
 
-        if (!isFirebaseInitialized)
-        {
-            Debug.LogError("[Ошибка] Инициализация не завершена");
-            yield break;
-        }
+        if (!isFirebaseInitialized) yield break;
 
         SetUIInteractable(true);
-        Debug.Log("[Инициализация] Готово! Интерфейс активирован");
     }
 
     async Task InitializeFirebaseAsync()
     {
         try
         {
-            Debug.Log("[Инициализация] Создание экземпляра FirebaseAuth");
             auth = FirebaseAuth.DefaultInstance;
             auth.StateChanged += AuthStateChanged;
-            await Task.Delay(500); // Искусственная задержка для теста
-            
-            Debug.Log("[Инициализация] FirebaseAuth создан");
+            await Task.Delay(500);
             isFirebaseInitialized = true;
         }
         catch (System.Exception ex)
@@ -84,65 +74,131 @@ public class FirebaseAuthManager : MonoBehaviour
 
     public async void LoginButtonClick()
     {
-        Debug.Log("[Кнопка] Нажатие кнопки входа зафиксировано");
         if (!ValidateInputs()) return;
-        
+
         SetUIInteractable(false);
-        Debug.Log("[Авторизация] Начало процесса входа");
 
         try
         {
             string email = emailInputField.text;
             string password = passwordInputField.text;
-            
-            Debug.Log($"[Авторизация] Попытка входа для: {email}");
-            
+
             var loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
             await loginTask;
 
             if (loginTask.IsCompletedSuccessfully)
             {
-                Debug.Log($"[Успех] Успешный вход! Пользователь: {auth.CurrentUser.Email}");
-                SceneManager.LoadScene("Home"); // Переход на главную сцену
+                SceneManager.LoadScene("Home");
             }
             else
             {
-                Debug.LogError($"[Ошибка] Ошибка входа: {loginTask.Exception}");
+                HandleFirebaseError(loginTask.Exception);
             }
         }
         catch (FirebaseException ex)
         {
-            Debug.LogError($"[Ошибка] Firebase Exception: {ex.Message}");
+            Debug.LogError($"[Ошибка Firebase] {ex.Message}");
+            HandleFirebaseError(ex);
         }
         finally
         {
             SetUIInteractable(true);
-            Debug.Log("[Авторизация] Процесс входа завершен");
+        }
+    }
+
+    void HandleFirebaseError(System.Exception exception)
+    {
+        FirebaseException firebaseEx = exception as FirebaseException;
+        if (firebaseEx != null)
+        {
+            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+            switch (errorCode)
+            {
+                case AuthError.InvalidEmail:
+                    ShowEmailError("Неверный email");
+                    break;
+                case AuthError.WrongPassword:
+                    ShowPasswordError("Неверный пароль");
+                    break;
+                case AuthError.UserNotFound:
+                    ShowEmailError("Пользователь не найден");
+                    break;
+                default:
+                    ShowEmailError("Неверный email");
+                    ShowPasswordError("Неверный пароль");
+                    break;
+            }
         }
     }
 
     bool ValidateInputs()
     {
-        if (string.IsNullOrEmpty(emailInputField.text))
+        bool isValid = true;
+
+        string email = emailInputField.text.Trim();
+        string password = passwordInputField.text;
+
+        // Email проверка
+        if (string.IsNullOrWhiteSpace(email))
         {
-            Debug.LogError("[Валидация] Поле email пустое");
-            return false;
+            ShowEmailError("Введите email");
+            isValid = false;
+        }
+        else if (!IsValidEmail(email))
+        {
+            ShowEmailError("Неверный формат email");
+            isValid = false;
+        }
+        else
+        {
+            HideEmailError();
         }
 
-        if (string.IsNullOrEmpty(passwordInputField.text))
+        // Password проверка (только на пустоту)
+        if (string.IsNullOrWhiteSpace(password))
         {
-            Debug.LogError("[Валидация] Поле пароля пустое");
-            return false;
+            ShowPasswordError("Введите пароль");
+            isValid = false;
+        }
+        else
+        {
+            HidePasswordError();
         }
 
-        if (!IsValidEmail(emailInputField.text))
-        {
-            Debug.LogError("[Валидация] Некорректный email");
-            return false;
-        }
+        return isValid;
+    }
 
-        Debug.Log("[Валидация] Данные валидны");
-        return true;
+    void ShowEmailError(string message)
+    {
+        emailErrorLabel.text = message;
+        emailErrorLabel.gameObject.SetActive(true);
+        emailErrorIcon.SetActive(true);
+    }
+
+    void ShowPasswordError(string message)
+    {
+        passwordErrorLabel.text = message;
+        passwordErrorLabel.gameObject.SetActive(true);
+        passwordErrorIcon.SetActive(true);
+    }
+
+    void HideEmailError()
+    {
+        emailErrorLabel.gameObject.SetActive(false);
+        emailErrorIcon.SetActive(false);
+    }
+
+    void HidePasswordError()
+    {
+        passwordErrorLabel.gameObject.SetActive(false);
+        passwordErrorIcon.SetActive(false);
+    }
+
+    void HideErrorUI()
+    {
+        HideEmailError();
+        HidePasswordError();
     }
 
     bool IsValidEmail(string email)
@@ -163,8 +219,6 @@ public class FirebaseAuthManager : MonoBehaviour
         emailInputField.interactable = interactable;
         passwordInputField.interactable = interactable;
         loginButton.interactable = interactable;
-        
-        Debug.Log($"[Интерфейс] Состояние интерфейса: {(interactable ? "активен" : "заблокирован")}");
     }
 
     void OnDestroy()
@@ -174,7 +228,7 @@ public class FirebaseAuthManager : MonoBehaviour
             auth.StateChanged -= AuthStateChanged;
             auth = null;
         }
-        
+
         if (initCoroutine != null)
         {
             StopCoroutine(initCoroutine);
@@ -188,11 +242,11 @@ public class FirebaseAuthManager : MonoBehaviour
             user = auth.CurrentUser;
             if (user != null)
             {
-                Debug.Log($"[Авторизация] Состояние изменено: Пользователь {user.Email} вошел");
+                Debug.Log($"[Firebase] Пользователь вошёл: {user.Email}");
             }
             else
             {
-                Debug.Log("[Авторизация] Состояние изменено: Пользователь вышел");
+                Debug.Log("[Firebase] Пользователь вышел");
             }
         }
     }

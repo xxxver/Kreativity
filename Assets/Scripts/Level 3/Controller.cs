@@ -11,15 +11,30 @@ public class SelectionController : MonoBehaviour
     public Button goHomeButton;
     public Button nextLevelButton;
 
-    private void Start()
-    {
-        winPanel.SetActive(false);
+   private void Start()
+{
+    winPanel.SetActive(false);
 
+    string sceneName = SceneManager.GetActiveScene().name;
+
+    if (sceneName == "Level3-1")
+    {
         confirmButton.onClick.AddListener(ConfirmSelection);
-        goHomeButton.onClick.AddListener(() => SceneManager.LoadScene("Home"));
-        nextLevelButton.onClick.AddListener(GoToNextLevel);
+        nextLevelButton.onClick.AddListener(() => SceneManager.LoadScene("Level3-2"));
+    }
+    else if (sceneName == "Level3-2")
+    {
+        confirmButton.onClick.AddListener(ConfirmSelection);
+        nextLevelButton.onClick.AddListener(() => SceneManager.LoadScene("Level3-3"));
+    }
+    else if (sceneName == "Level3-3")
+    {
+         confirmButton.onClick.AddListener(ConfirmSelection);
+        nextLevelButton.onClick.AddListener(() => SceneManager.LoadScene("Home"));
     }
 
+    goHomeButton.onClick.AddListener(() => SceneManager.LoadScene("Home"));
+}
     private void ConfirmSelection()
     {
         SelectableElement selected = SelectableElement.GetSelected();
@@ -41,10 +56,5 @@ public class SelectionController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         winPanel.SetActive(true);
-    }
-
-    private void GoToNextLevel()
-    {
-        Debug.Log("Следующий уровень пока не реализован");
     }
 }
