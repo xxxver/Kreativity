@@ -1483,7 +1483,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.13978355, y: 0}
   m_AnchorMax: {x: 0.381, y: 1}
-  m_AnchoredPosition: {x: 11.880188, y: 0}
+  m_AnchoredPosition: {x: 11.882385, y: 0}
   m_SizeDelta: {x: -23.76, y: -49.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &157311298
@@ -2740,7 +2740,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E
     \u0445\u043E\u0442\u0438\u0442\u0435 \u0437\u0430\u043A\u043E\u043D\u0447\u0438\u0442\u044C
-    \u0443\u0440\u043E\u0432\u0435\u043D\u044C?"
+    \u0442\u0435\u043E\u0440\u0438\u044E?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c68e1a05bcdd4e8397f50f47da97dee, type: 2}
   m_sharedMaterial: {fileID: -65452313577297485, guid: 9c68e1a05bcdd4e8397f50f47da97dee, type: 2}
@@ -3636,6 +3636,9 @@ MonoBehaviour:
   - {fileID: 2138060554}
   backButton: {fileID: 93491210}
   activePanel: {fileID: 1350347589}
+  nextButton: {fileID: 53991287}
+  confirmButton: {fileID: 1151019168}
+  cancelButton: {fileID: 1706244870}
 --- !u!1 &845260095
 GameObject:
   m_ObjectHideFlags: 0

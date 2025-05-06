@@ -22,6 +22,10 @@ public class FirebaseAuthManager : MonoBehaviour
     public GameObject emailErrorIcon;
     public GameObject passwordErrorIcon;
 
+    [Header("Спрайты для инпутов")]
+    public Sprite defaultInputSprite;
+    public Sprite errorInputSprite;
+
     private FirebaseAuth auth;
     private FirebaseUser user;
     private bool isFirebaseInitialized = false;
@@ -139,7 +143,6 @@ public class FirebaseAuthManager : MonoBehaviour
         string email = emailInputField.text.Trim();
         string password = passwordInputField.text;
 
-        // Email проверка
         if (string.IsNullOrWhiteSpace(email))
         {
             ShowEmailError("Введите email");
@@ -155,7 +158,6 @@ public class FirebaseAuthManager : MonoBehaviour
             HideEmailError();
         }
 
-        // Password проверка (только на пустоту)
         if (string.IsNullOrWhiteSpace(password))
         {
             ShowPasswordError("Введите пароль");
@@ -174,6 +176,7 @@ public class FirebaseAuthManager : MonoBehaviour
         emailErrorLabel.text = message;
         emailErrorLabel.gameObject.SetActive(true);
         emailErrorIcon.SetActive(true);
+        SetInputSprite(emailInputField, errorInputSprite);
     }
 
     void ShowPasswordError(string message)
@@ -181,24 +184,36 @@ public class FirebaseAuthManager : MonoBehaviour
         passwordErrorLabel.text = message;
         passwordErrorLabel.gameObject.SetActive(true);
         passwordErrorIcon.SetActive(true);
+        SetInputSprite(passwordInputField, errorInputSprite);
     }
 
     void HideEmailError()
     {
         emailErrorLabel.gameObject.SetActive(false);
         emailErrorIcon.SetActive(false);
+        SetInputSprite(emailInputField, defaultInputSprite);
     }
 
     void HidePasswordError()
     {
         passwordErrorLabel.gameObject.SetActive(false);
         passwordErrorIcon.SetActive(false);
+        SetInputSprite(passwordInputField, defaultInputSprite);
     }
 
     void HideErrorUI()
     {
         HideEmailError();
         HidePasswordError();
+    }
+
+    void SetInputSprite(TMP_InputField inputField, Sprite sprite)
+    {
+        Image image = inputField.GetComponent<Image>();
+        if (image != null)
+        {
+            image.sprite = sprite;
+        }
     }
 
     bool IsValidEmail(string email)

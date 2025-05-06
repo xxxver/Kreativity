@@ -38,7 +38,7 @@ public class LevelPanelManager : MonoBehaviour
 
         TheoryLevel1.GetComponent<Button>().onClick.AddListener(OpenAcceptTheroryPanel);
         TheoryCancel.onClick.AddListener(CloseAcceptTheroryPanel);
-        TheoryAccept.onClick.AddListener(() => LoadScene("Theory1"));
+        TheoryAccept.onClick.AddListener(() => LoadScene("Theory2"));
 
         level2.GetComponent<Button>().onClick.AddListener(OpenAcceptLevel2Panel);
         Level2Cancel.onClick.AddListener(CloseAcceptLevel2Panel);

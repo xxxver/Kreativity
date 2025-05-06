@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Level1/LevelTheory1.unity
     guid: b7623292aea8ba443b96b430e4352e0d
   - enabled: 1
-    path: Assets/Scenes/Level1/Theory1.unity
+    path: Assets/Scenes/Level1/Theory/Theory1.unity
     guid: cb2da711530df3d4cbcc9e02765946e3
   - enabled: 1
     path: Assets/Scenes/Level1/Level1-1.unity
@@ -24,8 +24,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Level1/Level1.unity
     guid: 298f7bb4abab82c4b8fc6a4a4ecc3607
   - enabled: 1
+    path: Assets/Scenes/Level2/LevelTheory2.unity
+    guid: 6c0034c625253db4b9c97ee548dff3af
+  - enabled: 1
     path: Assets/Scenes/Level2/Level2-1.unity
     guid: 1993f5064bd24e34aa05d0bb0d8ed915
+  - enabled: 1
+    path: Assets/Scenes/Level1/Theory/Theory2.unity
+    guid: f47ac3de76cc4054abb717c60b323e73
   - enabled: 1
     path: Assets/Scenes/Level2/Level2-2.unity
     guid: 00fa5305ffa2f994788b80f617a03043
