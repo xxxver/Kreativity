@@ -2,10 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
+using Firebase.Firestore;
 using System.Threading.Tasks;
 using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public class FirebaseAuthManager : MonoBehaviour
     public Sprite errorInputSprite;
 
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
     private FirebaseUser user;
     private bool isFirebaseInitialized = false;
     private Coroutine initCoroutine;
@@ -44,7 +47,11 @@ public class FirebaseAuthManager : MonoBehaviour
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
         yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
-        if (dependencyTask.Exception != null) yield break;
+        if (dependencyTask.Exception != null)
+        {
+            Debug.LogError("Ошибка при проверке зависимостей Firebase");
+            yield break;
+        }
 
         var initializationTask = InitializeFirebaseAsync();
         float timeout = 10f;
@@ -56,7 +63,11 @@ public class FirebaseAuthManager : MonoBehaviour
             yield return null;
         }
 
-        if (!isFirebaseInitialized) yield break;
+        if (!isFirebaseInitialized)
+        {
+            Debug.LogError("Firebase не был инициализирован в установленный срок");
+            yield break;
+        }
 
         SetUIInteractable(true);
     }
@@ -67,12 +78,13 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             auth = FirebaseAuth.DefaultInstance;
             auth.StateChanged += AuthStateChanged;
+            db = FirebaseFirestore.DefaultInstance;
             await Task.Delay(500);
             isFirebaseInitialized = true;
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"[Ошибка] Инициализация: {ex}");
+            Debug.LogError($"[Ошибка] Инициализация Firebase: {ex}");
         }
     }
 
@@ -92,6 +104,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
             if (loginTask.IsCompletedSuccessfully)
             {
+                user = auth.CurrentUser;
+                await LoadUserData();
                 SceneManager.LoadScene("Home");
             }
             else
@@ -109,6 +123,51 @@ public class FirebaseAuthManager : MonoBehaviour
             SetUIInteractable(true);
         }
     }
+
+   private async Task LoadUserData()
+{
+    if (user == null)
+    {
+        Debug.LogError("user == null");
+        return;
+    }
+
+    Debug.Log($"📡 Запрашиваем данные пользователя с ID: {user.UserId}");
+
+    DocumentReference docRef = db.Collection("users").Document(user.UserId);
+    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+    if (snapshot.Exists)
+    {
+        Debug.Log("✅ Документ найден.");
+
+        Dictionary<string, object> userData = snapshot.ToDictionary();
+
+        foreach (var pair in userData)
+        {
+            Debug.Log($"🔍 {pair.Key} = {pair.Value}");
+        }
+
+        if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("Balls"))
+        {
+            string name = userData["Name"]?.ToString();
+            string email = userData["email"]?.ToString();
+            long balls = userData.ContainsKey("Balls") ? (long)userData["Balls"] : 0;
+
+            Debug.Log($"🎯 Имя: {name}, Email: {email}, Баллы: {balls}");
+
+            UserData.Instance.SetUserData(name, email, balls);
+        }
+        else
+        {
+            Debug.LogError("❌ Некоторые ключи отсутствуют в документе Firestore.");
+        }
+    }
+    else
+    {
+        Debug.LogError("❌ Документ пользователя не найден в Firestore.");
+    }
+}
 
     void HandleFirebaseError(System.Exception exception)
     {

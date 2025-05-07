@@ -1273,7 +1273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.13978355, y: 0}
   m_AnchorMax: {x: 0.381, y: 1}
-  m_AnchoredPosition: {x: 11.88031, y: 0}
+  m_AnchoredPosition: {x: 11.880554, y: 0}
   m_SizeDelta: {x: -23.76, y: -49.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &157311298
@@ -3650,6 +3650,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540980460}
   m_CullTransparentMesh: 1
+--- !u!1 &552547421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 552547423}
+  - component: {fileID: 552547422}
+  m_Layer: 0
+  m_Name: tracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &552547422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552547421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49d396139d40ba42b2c5441966b4a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2112691016}
+  ballsLabel: {fileID: 1859554}
+--- !u!4 &552547423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552547421}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.520308, y: -0.1409366, z: -0.579702}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &566279833
 GameObject:
   m_ObjectHideFlags: 0
@@ -12637,3 +12683,4 @@ SceneRoots:
   - {fileID: 2095147502}
   - {fileID: 1826826564}
   - {fileID: 770834230}
+  - {fileID: 552547423}
