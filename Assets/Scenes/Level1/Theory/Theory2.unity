@@ -3295,6 +3295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2083715790}
   - component: {fileID: 2083715791}
+  - component: {fileID: 2083715792}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -3336,6 +3337,20 @@ MonoBehaviour:
   nextSceneButton: {fileID: 53991290}
   extraOpenButton1: {fileID: 157311298}
   extraOpenButton2: {fileID: 1502747026}
+--- !u!114 &2083715792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083715788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49d396139d40ba42b2c5441966b4a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2112691016}
+  ballsLabel: {fileID: 1859554}
 --- !u!1 &2112691014
 GameObject:
   m_ObjectHideFlags: 0

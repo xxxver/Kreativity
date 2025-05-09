@@ -3592,6 +3592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 800598963}
   - component: {fileID: 800598964}
+  - component: {fileID: 800598965}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -3639,6 +3640,20 @@ MonoBehaviour:
   nextButton: {fileID: 53991287}
   confirmButton: {fileID: 1151019168}
   cancelButton: {fileID: 1706244870}
+--- !u!114 &800598965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800598962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49d396139d40ba42b2c5441966b4a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2112691016}
+  ballsLabel: {fileID: 1859554}
 --- !u!1 &845260095
 GameObject:
   m_ObjectHideFlags: 0
