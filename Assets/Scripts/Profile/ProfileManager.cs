@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;  // Для работы с загрузкой сцен
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using TMPro;
 
 public class ProfileManager : MonoBehaviour
@@ -9,7 +10,6 @@ public class ProfileManager : MonoBehaviour
     public TMP_InputField nameInputField;
     public TMP_InputField emailInputField;
 
-    // 🔹 Добавляем кнопки extra open button 1 и 2
     public Button extraOpenButton1;
     public Button extraOpenButton2;
 
@@ -22,7 +22,6 @@ public class ProfileManager : MonoBehaviour
 
         saveButton.onClick.AddListener(SaveData);
 
-        // 🔹 Добавляем обработчики событий для extra open button 1 и 2
         extraOpenButton1.onClick.AddListener(() => LoadScene("Home"));
         extraOpenButton2.onClick.AddListener(() => LoadScene("Home"));
 
@@ -59,7 +58,6 @@ public class ProfileManager : MonoBehaviour
         originalEmail = emailInputField.text;
     }
 
-    // 🔹 Метод для загрузки сцены
     private void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
