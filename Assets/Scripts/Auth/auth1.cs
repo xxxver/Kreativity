@@ -10,7 +10,7 @@ public class UserData : MonoBehaviour
 {
     public static UserData Instance;
 
-    public string userName;
+    public string Name;
     public string email;
     public long balls;
 
@@ -46,7 +46,7 @@ public class UserData : MonoBehaviour
 
     public void SetUserData(string name, string email, long balls)
     {
-        this.userName = name;
+        this.Name = name;
         this.email = email;
         this.balls = balls;
 
@@ -65,7 +65,7 @@ public class UserData : MonoBehaviour
         DocumentReference docRef = db.Collection("users").Document(user.UserId);
         Dictionary<string, object> userData = new Dictionary<string, object>
         {
-            { "userName", userName },
+            { "Name", Name },
             { "email", email },
             { "balls", balls }
         };

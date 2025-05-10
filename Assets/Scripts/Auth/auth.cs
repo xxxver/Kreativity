@@ -124,50 +124,50 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-   private async Task LoadUserData()
-{
-    if (user == null)
+    private async Task LoadUserData()
     {
-        Debug.LogError("user == null");
-        return;
-    }
-
-    Debug.Log($"📡 Запрашиваем данные пользователя с ID: {user.UserId}");
-
-    DocumentReference docRef = db.Collection("users").Document(user.UserId);
-    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-    if (snapshot.Exists)
-    {
-        Debug.Log("✅ Документ найден.");
-
-        Dictionary<string, object> userData = snapshot.ToDictionary();
-
-        foreach (var pair in userData)
+        if (user == null)
         {
-            Debug.Log($"🔍 {pair.Key} = {pair.Value}");
+            Debug.LogError("user == null");
+            return;
         }
 
-        if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("Balls"))
+        Debug.Log($"📡 Запрашиваем данные пользователя с ID: {user.UserId}");
+
+        DocumentReference docRef = db.Collection("users").Document(user.UserId);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+        if (snapshot.Exists)
         {
-            string name = userData["Name"]?.ToString();
-            string email = userData["email"]?.ToString();
-            long balls = userData.ContainsKey("Balls") ? (long)userData["Balls"] : 0;
+            Debug.Log("✅ Документ найден.");
 
-            Debug.Log($"🎯 Имя: {name}, Email: {email}, Баллы: {balls}");
+            Dictionary<string, object> userData = snapshot.ToDictionary();
 
-            UserData.Instance.SetUserData(name, email, balls);
+            foreach (var pair in userData)
+            {
+                Debug.Log($"🔍 {pair.Key} = {pair.Value}");
+            }
+
+            if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("balls"))
+            {
+                string name = userData["Name"]?.ToString();
+                string email = userData["email"]?.ToString();
+                long balls = userData.ContainsKey("balls") ? (long)userData["balls"] : 0;
+
+                Debug.Log($"🎯 Имя: {name}, Email: {email}, Баллы: {balls}");
+
+                UserData.Instance.SetUserData(name, email, balls);
+            }
+            else
+            {
+                Debug.LogError("❌ Некоторые ключи отсутствуют в документе Firestore.");
+            }
         }
         else
         {
-            Debug.LogError("❌ Некоторые ключи отсутствуют в документе Firestore.");
+            Debug.LogError("❌ Документ пользователя не найден в Firestore.");
         }
     }
-    else
-    {
-        Debug.LogError("❌ Документ пользователя не найден в Firestore.");
-    }
-}
 
     void HandleFirebaseError(System.Exception exception)
     {

@@ -10,8 +10,8 @@ public class HomeUIController : MonoBehaviour
     {
         if (UserData.Instance != null)
         {
-            nameLabel.text = UserData.Instance.userName;
-            ballsLabel.text =$"{UserData.Instance.balls.ToString()} баллов";
+            nameLabel.text = UserData.Instance.Name;
+            ballsLabel.text = $"{UserData.Instance.balls.ToString()} баллов";
         }
         else
         {

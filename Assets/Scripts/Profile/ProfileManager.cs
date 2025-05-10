@@ -30,7 +30,7 @@ public class ProfileManager : MonoBehaviour
 
     private void FetchDataFromUserData()
     {
-        originalName = UserData.Instance.userName;
+        originalName = UserData.Instance.Name;
         originalEmail = UserData.Instance.email;
 
         nameInputField.text = originalName;
