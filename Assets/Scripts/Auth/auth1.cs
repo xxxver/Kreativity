@@ -67,7 +67,8 @@ public class UserData : MonoBehaviour
         {
             { "Name", Name },
             { "email", email },
-            { "balls", balls }
+            { "Balls", balls },
+            { "Level1Completed", false } // Инициализация булевого поля для уровня
         };
 
         docRef.SetAsync(userData).ContinueWithOnMainThread(task => {

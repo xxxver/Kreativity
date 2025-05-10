@@ -148,11 +148,11 @@ public class FirebaseAuthManager : MonoBehaviour
                 Debug.Log($"🔍 {pair.Key} = {pair.Value}");
             }
 
-            if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("balls"))
+            if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("Balls"))
             {
                 string name = userData["Name"]?.ToString();
                 string email = userData["email"]?.ToString();
-                long balls = userData.ContainsKey("balls") ? (long)userData["balls"] : 0;
+                long balls = userData.ContainsKey("Balls") ? (long)userData["Balls"] : 0;
 
                 Debug.Log($"🎯 Имя: {name}, Email: {email}, Баллы: {balls}");
 
