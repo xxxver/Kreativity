@@ -7,18 +7,22 @@ public class ProgressBarl2 : MonoBehaviour
     public Button cancelButton;  // Кнопка Cancel на панели Win
 
     void Start()
-    {
-        cancelButton.onClick.AddListener(OnCancelClicked);
-    }
+{
+    cancelButton.onClick.AddListener(OnCancelClicked);
+}
 
-    private void OnCancelClicked()
+private void OnCancelClicked()
+{
+    float currentProgress = PlayerPrefs.GetFloat("LevelProgress2", 0f);
+
+    // Устанавливаем 0.2, только если прогресс меньше 0.4
+    if (currentProgress < 0.4f)
     {
-        // Сохраняем прогресс как 50% (0.5) с ключом LevelProgress2
         PlayerPrefs.SetFloat("LevelProgress2", 0.2f);
         PlayerPrefs.Save();
-        
-
-        // Переход на сцену Home
-        SceneManager.LoadScene("Home");
     }
+
+    SceneManager.LoadScene("Home");
+}
+
 }

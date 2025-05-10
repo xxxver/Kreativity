@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 276302561}
   - component: {fileID: 276302563}
   - component: {fileID: 276302562}
+  - component: {fileID: 276302564}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -882,6 +883,20 @@ MonoBehaviour:
   confirmButton: {fileID: 1494067633}
   homeButton: {fileID: 584313342}
   nextLevelButton: {fileID: 1166292274}
+--- !u!114 &276302564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276302559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49d396139d40ba42b2c5441966b4a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2112691016}
+  ballsLabel: {fileID: 1859554}
 --- !u!1 &289395020
 GameObject:
   m_ObjectHideFlags: 0
@@ -2566,7 +2581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -9.162598, y: -4.8}
+  m_AnchoredPosition: {x: -9.162598, y: -4.800003}
   m_SizeDelta: {x: 1302.36, y: 984.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1004401229

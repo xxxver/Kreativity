@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 276302561}
   - component: {fileID: 276302563}
   - component: {fileID: 276302564}
+  - component: {fileID: 276302565}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -882,6 +883,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cancelButton: {fileID: 1151019170}
+--- !u!114 &276302565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276302559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49d396139d40ba42b2c5441966b4a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2112691016}
+  ballsLabel: {fileID: 1859554}
 --- !u!1 &289395020
 GameObject:
   m_ObjectHideFlags: 0

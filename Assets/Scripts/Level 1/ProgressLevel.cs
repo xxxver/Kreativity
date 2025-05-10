@@ -4,22 +4,24 @@ using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {
-    public Button cancelButton;  // Кнопка Cancel на панели Win
+public Button cancelButton; // Кнопка Cancel на панели Win
 
-    void Start()
-    {
-        // Привязываем метод к кнопке Cancel
-        cancelButton.onClick.AddListener(OnCancelClicked);
-    }
+void Start()
+{
+    cancelButton.onClick.AddListener(OnCancelClicked);
+}
 
-    // Метод, вызываемый при нажатии на Cancel
-    private void OnCancelClicked()
+private void OnCancelClicked()
+{
+    float currentProgress = PlayerPrefs.GetFloat("LevelProgress", 0f);
+
+    // Обновляем прогресс только если он меньше 0.5
+    if (currentProgress < 0.5f)
     {
-        // Сохраняем прогресс как 50% (0.5)
         PlayerPrefs.SetFloat("LevelProgress", 0.5f);
         PlayerPrefs.Save();
-
-        // Переход на сцену Home
-        SceneManager.LoadScene("Home");
     }
+
+    SceneManager.LoadScene("Home");
+}
 }

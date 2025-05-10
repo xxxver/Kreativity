@@ -25,6 +25,9 @@ public class LevelPanelManager : MonoBehaviour
     public Button Level3Cancel;
     public Button Level3Accept;
 
+    // 🔹 Объект для перехода на сцену Profile
+    public GameObject profile;
+
     private void Start()
     {
         levelPanel.SetActive(false);
@@ -48,6 +51,9 @@ public class LevelPanelManager : MonoBehaviour
         level3.GetComponent<Button>().onClick.AddListener(OpenAcceptLevel3Panel);
         Level3Cancel.onClick.AddListener(CloseAcceptLevel3Panel);
         Level3Accept.onClick.AddListener(() => LoadScene("LevelTheory3"));
+
+        // 🔹 Обработка нажатия для profile
+        profile.GetComponent<Button>().onClick.AddListener(() => LoadScene("Profile"));
     }
 
     public void OpenLevelPanel() => levelPanel.SetActive(true);
