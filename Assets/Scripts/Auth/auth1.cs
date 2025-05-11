@@ -16,7 +16,6 @@ public class UserData : MonoBehaviour
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    private FirebaseUser user;
 
     void Awake()
     {
@@ -40,7 +39,6 @@ public class UserData : MonoBehaviour
 
             auth = FirebaseAuth.DefaultInstance;
             db = FirebaseFirestore.DefaultInstance;
-            user = auth.CurrentUser;
         });
     }
 
@@ -56,29 +54,30 @@ public class UserData : MonoBehaviour
 
     private void SaveDataToFirestore()
     {
-        if (db == null || user == null)
+        if (db == null || auth.CurrentUser == null)
         {
             Debug.LogError("Firestore or User is not initialized.");
             return;
         }
 
-        DocumentReference docRef = db.Collection("users").Document(user.UserId);
+        FirebaseUser currentUser = auth.CurrentUser;
+        DocumentReference docRef = db.Collection("users").Document(currentUser.UserId);
+        
         Dictionary<string, object> userData = new Dictionary<string, object>
         {
             { "Name", Name },
             { "email", email },
-            { "Balls", balls },
-            { "Level1Completed", false } // Инициализация булевого поля для уровня
+            { "Balls", balls }
         };
 
-        docRef.SetAsync(userData).ContinueWithOnMainThread(task => {
+        docRef.SetAsync(userData, SetOptions.MergeAll).ContinueWithOnMainThread(task => {
             if (task.IsCompleted)
             {
-                Debug.Log("Data saved to Firestore successfully!");
+                Debug.Log("Data merged with Firestore successfully!");
             }
             else
             {
-                Debug.LogError("Failed to save data to Firestore: " + task.Exception);
+                Debug.LogError("Failed to merge data to Firestore: " + task.Exception);
             }
         });
     }

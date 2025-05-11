@@ -47,22 +47,36 @@ private async Task CheckAndAwardIfNotCompleted()
     DocumentReference docRef = db.Collection("users").Document(userId);
     DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
+    Dictionary<string, object> updates = new Dictionary<string, object>();
+
     if (!snapshot.Exists)
     {
-        Debug.LogError("User document not found!");
-        return;
-    }
-
-    Dictionary<string, object> userData = snapshot.ToDictionary();
-
-    bool levelCompleted = userData.ContainsKey(levelKey) && (bool)userData[levelKey];
-    if (levelCompleted)
-    {
-        Debug.Log("Level already completed, skipping reward.");
+        Debug.Log("User document not found, creating a new one.");
+        updates["Balls"] = 100; // Начальное значение
+        updates[levelKey] = true;
     }
     else
     {
-        await AwardLevelCompletion(docRef);
+        Dictionary<string, object> userData = snapshot.ToDictionary();
+        bool levelCompleted = userData.ContainsKey(levelKey) && (bool)userData[levelKey];
+
+        if (!levelCompleted)
+        {
+            long newBalls = UserData.Instance.balls + 100;
+            UserData.Instance.balls = newBalls;
+            updates["Balls"] = newBalls;
+            updates[levelKey] = true;
+        }
+        else
+        {
+            Debug.Log("Level already completed, skipping reward.");
+        }
+    }
+
+    if (updates.Count > 0)
+    {
+        await docRef.SetAsync(updates, SetOptions.MergeAll);
+        Debug.Log("Awarded points and marked level as completed.");
     }
 
     SceneManager.LoadScene("Home");

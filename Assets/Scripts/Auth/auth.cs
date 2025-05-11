@@ -311,6 +311,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
+        if (!isFirebaseInitialized) return;
+
         if (auth.CurrentUser != user)
         {
             user = auth.CurrentUser;
