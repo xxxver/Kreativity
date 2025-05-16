@@ -6,46 +6,24 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-public class ProgressBar3 : MonoBehaviour
+public class ProgressBarL3_3 : MonoBehaviour
 {
     public Button cancelButton;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-    public string levelKey = "Level3Completed";
-    public float levelProgressValue = 1.0f; // например 100% прогресса
+    private const string progressKey = "LevelProgress3";
+    private const float targetProgress = 1.0f;
+    private const string completeKey = "Level3Completed";
 
     void Start()
     {
-        Debug.Log("Start method called.");
-
         cancelButton.onClick.AddListener(OnCancelClicked);
         db = FirebaseFirestore.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
-
-        Debug.Log("Firebase Firestore and Auth initialized.");
     }
 
     private async void OnCancelClicked()
     {
-        Debug.Log("Cancel button clicked.");
-
-        float savedProgress = PlayerPrefs.GetFloat("LevelProgress3", 0f);
-        Debug.Log($"Saved progress: {savedProgress}");
-
-        if (levelProgressValue > savedProgress)
-        {
-            PlayerPrefs.SetFloat("LevelProgress3", levelProgressValue);
-            PlayerPrefs.Save();
-            Debug.Log("Level progress saved to PlayerPrefs.");
-        }
-
-        await CheckAndAwardIfNotCompleted();
-    }
-
-    private async Task CheckAndAwardIfNotCompleted()
-    {
-        Debug.Log("CheckAndAwardIfNotCompleted method called.");
-
         FirebaseUser user = auth.CurrentUser;
         if (user == null)
         {
@@ -53,63 +31,54 @@ public class ProgressBar3 : MonoBehaviour
             return;
         }
 
-        Debug.Log("User is authenticated. User ID: " + user.UserId);
-
-        string userId = user.UserId;
-        DocumentReference docRef = db.Collection("users").Document(userId);
-
+        DocumentReference docRef = db.Collection("users").Document(user.UserId);
         try
         {
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-            Dictionary<string, object> userData = snapshot.Exists ? snapshot.ToDictionary() : new Dictionary<string, object>();
 
-            // Проверяем, был ли уровень уже пройден
-            bool levelCompleted = userData.ContainsKey(levelKey) && (bool)userData[levelKey];
-            if (levelCompleted)
+            float currentProgress = 0f;
+            if (snapshot.Exists && snapshot.ContainsField(progressKey))
             {
-                Debug.Log("Level already completed, skipping reward.");
+                object val = snapshot.GetValue<object>(progressKey);
+                if (val is long l) currentProgress = l;
+                else if (val is double d) currentProgress = (float)d;
+                else if (val is float f) currentProgress = f;
             }
-            else
+
+            bool alreadyCompleted = snapshot.Exists &&
+                snapshot.ContainsField(completeKey) &&
+                snapshot.GetValue<bool>(completeKey);
+
+            var updates = new Dictionary<string, object>();
+
+            if (currentProgress < targetProgress)
             {
-                await AwardLevelCompletion(docRef, userData);
+                updates[progressKey] = targetProgress;
+                Debug.Log($"Progress updated to {targetProgress}");
+            }
+
+            if (!alreadyCompleted)
+            {
+                long newBalls = UserData.Instance != null ? UserData.Instance.balls + 100 : 100;
+                if (UserData.Instance != null)
+                    UserData.Instance.balls = newBalls;
+
+                updates["Balls"] = newBalls;
+                updates[completeKey] = true;
+
+                Debug.Log("Reward granted and level marked as completed.");
+            }
+
+            if (updates.Count > 0)
+            {
+                await docRef.SetAsync(updates, SetOptions.MergeAll);
             }
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Error checking or awarding level completion: {e.Message}");
+            Debug.LogError($"Error updating progress: {e.Message}");
         }
 
         SceneManager.LoadScene("Home");
-    }
-
-    private async Task AwardLevelCompletion(DocumentReference docRef, Dictionary<string, object> userData)
-    {
-        Debug.Log("AwardLevelCompletion method called.");
-
-        if (UserData.Instance == null)
-        {
-            Debug.LogError("UserData.Instance is null!");
-            return;
-        }
-
-        long newBalls = UserData.Instance.balls + 100;
-        UserData.Instance.balls = newBalls;
-
-        // Обновляем данные в Firestore
-        Dictionary<string, object> updates = new Dictionary<string, object>
-        {
-            { "Balls", newBalls },
-            { levelKey, true }
-        };
-
-        try
-        {
-            await docRef.SetAsync(updates, SetOptions.MergeAll);
-            Debug.Log("Awarded points and marked level as completed.");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Error updating Firestore document: {e.Message}");
-        }
     }
 }

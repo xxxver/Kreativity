@@ -132,21 +132,12 @@ public class FirebaseAuthManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"📡 Запрашиваем данные пользователя с ID: {user.UserId}");
-
         DocumentReference docRef = db.Collection("users").Document(user.UserId);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
         if (snapshot.Exists)
         {
-            Debug.Log("✅ Документ найден.");
-
             Dictionary<string, object> userData = snapshot.ToDictionary();
-
-            foreach (var pair in userData)
-            {
-                Debug.Log($"🔍 {pair.Key} = {pair.Value}");
-            }
 
             if (userData.ContainsKey("Name") && userData.ContainsKey("email") && userData.ContainsKey("Balls"))
             {
@@ -154,18 +145,8 @@ public class FirebaseAuthManager : MonoBehaviour
                 string email = userData["email"]?.ToString();
                 long balls = userData.ContainsKey("Balls") ? (long)userData["Balls"] : 0;
 
-                Debug.Log($"🎯 Имя: {name}, Email: {email}, Баллы: {balls}");
-
                 UserData.Instance.SetUserData(name, email, balls);
             }
-            else
-            {
-                Debug.LogError("❌ Некоторые ключи отсутствуют в документе Firestore.");
-            }
-        }
-        else
-        {
-            Debug.LogError("❌ Документ пользователя не найден в Firestore.");
         }
     }
 
@@ -316,14 +297,6 @@ public class FirebaseAuthManager : MonoBehaviour
         if (auth.CurrentUser != user)
         {
             user = auth.CurrentUser;
-            if (user != null)
-            {
-                Debug.Log($"[Firebase] Пользователь вошёл: {user.Email}");
-            }
-            else
-            {
-                Debug.Log("[Firebase] Пользователь вышел");
-            }
         }
     }
 }

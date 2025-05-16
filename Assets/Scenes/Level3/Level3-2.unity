@@ -2329,6 +2329,8 @@ MonoBehaviour:
   winPanel: {fileID: 758809556}
   goHomeButton: {fileID: 584313342}
   nextLevelButton: {fileID: 1166292274}
+  levelKey: Level3Completed
+  levelProgressValue: 1
 --- !u!4 &871849833
 Transform:
   m_ObjectHideFlags: 0
@@ -2386,7 +2388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0fa7d9c435df384b8d9046251c9e276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cancelButton: {fileID: 1151019170}
+  cancelButton: {fileID: 584313342}
 --- !u!1 &883213188
 GameObject:
   m_ObjectHideFlags: 0

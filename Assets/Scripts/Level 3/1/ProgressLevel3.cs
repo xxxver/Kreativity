@@ -1,27 +1,60 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Firebase.Auth;
+using Firebase.Firestore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public class ProgressBarl3_3 : MonoBehaviour
+public class ProgressBarL3_1 : MonoBehaviour
 {
-    public Button cancelButton;  // Кнопка Cancel на панели Win
+    public Button cancelButton;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private const string progressKey = "LevelProgress3";
+    private const float targetProgress = 0.33f;
 
     void Start()
-{
-    cancelButton.onClick.AddListener(OnCancelClicked);
-}
-
-private void OnCancelClicked()
-{
-    float currentProgress = PlayerPrefs.GetFloat("LevelProgress3", 0f);
-
-    if (currentProgress < 0.66f)
     {
-        PlayerPrefs.SetFloat("LevelProgress3", 0.33f);
-        PlayerPrefs.Save();
+        cancelButton.onClick.AddListener(OnCancelClicked);
+        auth = FirebaseAuth.DefaultInstance;
+        db = FirebaseFirestore.DefaultInstance;
     }
 
-    SceneManager.LoadScene("Home");
-}
+    private async void OnCancelClicked()
+    {
+        FirebaseUser user = auth.CurrentUser;
+        if (user == null)
+        {
+            Debug.LogError("User is not authenticated!");
+            return;
+        }
 
+        var docRef = db.Collection("users").Document(user.UserId);
+        try
+        {
+            var snapshot = await docRef.GetSnapshotAsync();
+
+            float current = 0f;
+            if (snapshot.Exists && snapshot.ContainsField(progressKey))
+            {
+                object val = snapshot.GetValue<object>(progressKey);
+                if (val is long l) current = l;
+                else if (val is double d) current = (float)d;
+                else if (val is float f) current = f;
+            }
+
+            if (targetProgress > current)
+            {
+                await docRef.SetAsync(new Dictionary<string, object> { { progressKey, targetProgress } }, SetOptions.MergeAll);
+                Debug.Log($"Updated {progressKey} to {targetProgress}");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error updating progress: {e.Message}");
+        }
+
+        SceneManager.LoadScene("Home");
+    }
 }

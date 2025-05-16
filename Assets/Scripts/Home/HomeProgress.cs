@@ -1,69 +1,127 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Firebase.Firestore;
+using Firebase.Auth;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class ProgressBarManager : MonoBehaviour
 {
-    public Slider progressBar;  // Прогрессбар на сцене Home
-    public TMP_Text progressText;   // TextMeshPro для отображения процента
-    public GameObject theoryButtonObject; // GameObject кнопки теории
-    public GameObject theoryPanel; // Панель с теорией (для скрытия компонентов внутри)
-    public Image theoryButtonImage; // Image кнопки теории (для смены спрайта)
-    
-    public Sprite theoryBlockedSprite; // Спрайт для заблокированного состояния
-    public Sprite theoryActiveSprite;  // Спрайт для активного состояния
+    public Slider progressBar;
+    public TMP_Text progressText;
+    public GameObject theoryButtonObject;
+    public GameObject theoryPanel;
+    public Image theoryButtonImage;
+    public Sprite theoryBlockedSprite;
+    public Sprite theoryActiveSprite;
 
-    private Button theoryButton; // Компонент Button
+    private Button theoryButton;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private const string levelKey = "LevelProgress1";
+    private const string PlayerPrefsKey = "LevelProgress1_Local";
+
+    private void Awake()
+    {
+        if (theoryButtonObject != null)
+            theoryButton = theoryButtonObject.GetComponent<Button>();
+    }
 
     void Start()
     {
-        // Получаем компонент Button с объекта теории
-        theoryButton = theoryButtonObject.GetComponent<Button>();
+        db = FirebaseFirestore.DefaultInstance;
+        auth = FirebaseAuth.DefaultInstance;
 
-        // Загружаем прогресс из PlayerPrefs (по умолчанию 0, если не сохранен)
-        float progress = PlayerPrefs.GetFloat("LevelProgress", 0f);
+        // 1. Мгновенно показать локальные данные (если есть)
+        float localProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
+        ApplyProgressToUI(localProgress);
 
-        // Устанавливаем значение прогрессбара
-        progressBar.value = progress;
+        // 2. Асинхронно обновить из Firestore (перезапишет если есть новое значение)
+        LoadProgressFromFirestore();
+    }
 
-        // Обновляем текст с процентом
+    private async void LoadProgressFromFirestore()
+    {
+        FirebaseUser user = auth.CurrentUser;
+        if (user == null)
+        {
+            Debug.LogWarning("User is not authenticated. Skipping Firestore progress load.");
+            return;
+        }
+
+        DocumentReference docRef = db.Collection("users").Document(user.UserId);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+        float progress = 0f;
+
+        if (snapshot.Exists && snapshot.ContainsField(levelKey))
+        {
+            object rawValue = snapshot.GetValue<object>(levelKey);
+            if (rawValue is long l) progress = l;
+            else if (rawValue is double d) progress = (float)d;
+            else if (rawValue is float f) progress = f;
+        }
+
+        Debug.Log($"[LevelProgress1] Firestore loaded value: {progress}");
+
+        // 3. Если пришло новое значение — обновить PlayerPrefs и UI
+        float localProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
+        if (!Mathf.Approximately(progress, localProgress))
+        {
+            PlayerPrefs.SetFloat(PlayerPrefsKey, progress);
+            PlayerPrefs.Save();
+            ApplyProgressToUI(progress);
+        }
+    }
+
+    private void ApplyProgressToUI(float progress)
+    {
+        if (progressBar != null)
+            progressBar.value = progress;
+
         UpdateProgressText(progress);
-
-        // Проверяем, нужно ли активировать кнопку теории
         CheckUnlockTheory(progress);
     }
 
-    // Метод для обновления текста прогресса
     private void UpdateProgressText(float progress)
     {
-        int percent = Mathf.RoundToInt(progress * 100);
-        progressText.text = $"{percent}%";
+        if (progressText != null)
+        {
+            int percent = Mathf.RoundToInt(progress * 100);
+            progressText.text = $"{percent}%";
+        }
     }
 
-    // Метод для проверки и активации кнопки теории
     private void CheckUnlockTheory(float progress)
     {
-        if (progress >= 1f) // 100%
+        if (theoryButton == null || theoryButtonImage == null || theoryPanel == null)
         {
-            theoryButton.interactable = true;  // Активируем кнопку
-            theoryButtonImage.sprite = theoryActiveSprite; // Сменить спрайт на активный
-            ShowTheoryPanel(true); // Показать панель с теорией (если она скрыта)
+            Debug.LogWarning("⚠️ UI не привязан, CheckUnlockTheory пропущен.");
+            return;
         }
-        else
+
+        bool unlocked = Mathf.Approximately(progress, 1.0f);
+
+        theoryButton.interactable = unlocked;
+        theoryButtonImage.sprite = unlocked ? theoryActiveSprite : theoryBlockedSprite;
+        ShowTheoryPanel(unlocked);
+    }
+
+    private void ShowTheoryPanel(bool show)
+    {
+        foreach (Transform child in theoryPanel.transform)
         {
-            theoryButton.interactable = false; // Отключаем кнопку
-            theoryButtonImage.sprite = theoryBlockedSprite; // Сменить спрайт на заблокированный
-            ShowTheoryPanel(false); // Скрыть панель с теорией
+            child.gameObject.SetActive(show);
         }
     }
 
-    // Метод для скрытия/показывания панели теории
-    private void ShowTheoryPanel(bool show)
+    /// <summary>
+    /// Очистить локальный прогресс (например, при выходе из аккаунта)
+    /// </summary>
+    public static void ClearCachedProgress()
     {
-        // Здесь мы скрываем или показываем компоненты в панели теории
-        foreach (Transform child in theoryPanel.transform)
-        {
-            child.gameObject.SetActive(show); // Скрыть/показать все дочерние объекты
-        }
+        PlayerPrefs.DeleteKey(PlayerPrefsKey);
+        PlayerPrefs.Save();
     }
 }

@@ -2239,9 +2239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8626bce25e176d849bc8c941554ebc79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cancelButton: {fileID: 584313342}
-  levelKey: Level3Completed
-  levelProgressValue: 1
+  cancelButton: {fileID: 1166292274}
 --- !u!114 &883213194
 MonoBehaviour:
   m_ObjectHideFlags: 0

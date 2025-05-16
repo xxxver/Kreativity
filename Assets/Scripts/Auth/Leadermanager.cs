@@ -6,26 +6,43 @@ using System.Linq;
 
 public class LeaderboardManager : MonoBehaviour
 {
-    public LeaderUI[] leaderEntries = new LeaderUI[7]; // Привяжи в инспекторе
+    public LeaderUI[] leaderEntries = new LeaderUI[7];
+    public GameObject leaderboardRoot;
+    public GameObject loadingSpinner;
+
     private FirebaseFirestore db;
 
     void Start()
     {
         db = FirebaseFirestore.DefaultInstance;
-        LoadLeaderboard();
+
+        // Показываем кэш мгновенно, если есть
+        if (CachedLeaderboard.TopUsers.Count > 0)
+        {
+            Display(CachedLeaderboard.TopUsers);
+            if (leaderboardRoot != null) leaderboardRoot.SetActive(true);
+        }
+        else
+        {
+            if (leaderboardRoot != null) leaderboardRoot.SetActive(false);
+            if (loadingSpinner != null) loadingSpinner.SetActive(true);
+        }
+
+        // Загружаем из Firestore и обновляем
+        LoadFromFirestore();
     }
 
-    public void LoadLeaderboard()
+    private void LoadFromFirestore()
     {
         db.Collection("users").GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsFaulted || task.IsCanceled)
             {
-                Debug.LogError("Error getting leaderboard data: " + task.Exception);
+                Debug.LogError("Ошибка загрузки лидерборда: " + task.Exception);
                 return;
             }
 
-            List<UserScore> users = new List<UserScore>();
+            List<(string name, long balls)> users = new();
 
             foreach (DocumentSnapshot doc in task.Result.Documents)
             {
@@ -37,30 +54,33 @@ public class LeaderboardManager : MonoBehaviour
 
                 if (balls > 0)
                 {
-                    users.Add(new UserScore { name = name, balls = balls });
+                    users.Add((name, balls));
                 }
             }
 
-            var sorted = users.OrderByDescending(u => u.balls).Take(7).ToList();
+            var sorted = users.OrderByDescending(u => u.balls).Take(leaderEntries.Length).ToList();
+            CachedLeaderboard.TopUsers = sorted; // 🧠 кэшируем
 
-           for (int i = 0; i < leaderEntries.Length; i++)
-            {
-                if (i < sorted.Count)
-                {
-                    leaderEntries[i].SetData(sorted[i].name, $"{sorted[i].balls} баллов");
-                    leaderEntries[i].SetVisible(true);
-                }
-                else
-                {
-                    leaderEntries[i].SetVisible(false);
-                }
-            }
+            Display(sorted);
+
+            if (loadingSpinner != null) loadingSpinner.SetActive(false);
+            if (leaderboardRoot != null) leaderboardRoot.SetActive(true);
         });
     }
 
-    private class UserScore
+    private void Display(List<(string name, long balls)> data)
     {
-        public string name;
-        public long balls;
+        for (int i = 0; i < leaderEntries.Length; i++)
+        {
+            if (i < data.Count)
+            {
+                leaderEntries[i].SetData(data[i].name, $"{data[i].balls} баллов");
+                leaderEntries[i].SetVisible(true);
+            }
+            else
+            {
+                leaderEntries[i].SetVisible(false);
+            }
+        }
     }
 }
