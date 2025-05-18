@@ -34,16 +34,18 @@ public class ProgressBarManager2 : MonoBehaviour
     {
         if (theoryButtonObject != null)
             theoryButton = theoryButtonObject.GetComponent<Button>();
+
         db = FirebaseFirestore.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
 
-        // 1. Показываем локальный кеш, если есть
+        // 1. Локальные данные
         float localProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
         ApplyProgressToUI(localProgress);
-        if (progressUIRoot != null)
-            progressUIRoot.SetActive(true); // UI сразу виден, но с локальными данными
 
-        // 2. Обновляем из Firestore
+        if (progressUIRoot != null)
+            progressUIRoot.SetActive(true); // UI появляется сразу
+
+        // 2. Обновление из Firestore
         LoadProgress();
     }
 
@@ -73,7 +75,6 @@ public class ProgressBarManager2 : MonoBehaviour
             await docRef.SetAsync(new Dictionary<string, object> { { levelKey, progress } }, SetOptions.MergeAll);
         }
 
-        // Если данные изменились — обновить PlayerPrefs и UI
         float cachedProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
         if (!Mathf.Approximately(progress, cachedProgress))
         {
@@ -103,13 +104,15 @@ public class ProgressBarManager2 : MonoBehaviour
 
     private void CheckUnlockTheory(float progress)
     {
+        bool unlocked = progress >= 1f;
+
         if (theoryButton != null)
-            theoryButton.interactable = progress >= 1f;
+            theoryButton.interactable = unlocked;
 
         if (theoryButtonImage != null)
-            theoryButtonImage.sprite = progress >= 1f ? theoryActiveSprite : theoryBlockedSprite;
+            theoryButtonImage.sprite = unlocked ? theoryActiveSprite : theoryBlockedSprite;
 
-        ShowTheoryPanel(progress >= 1f);
+        ShowTheoryPanel(unlocked);
     }
 
     private void ShowTheoryPanel(bool show)
@@ -121,9 +124,6 @@ public class ProgressBarManager2 : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Очистить локальный кеш (например, при выходе из аккаунта)
-    /// </summary>
     public static void ClearCachedProgress()
     {
         PlayerPrefs.DeleteKey(PlayerPrefsKey);
