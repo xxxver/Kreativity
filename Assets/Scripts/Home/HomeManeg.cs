@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Firebase.Firestore;
+using Firebase.Extensions;
+using Firebase.Auth;
+using System.Threading.Tasks;
 
 public class LevelPanelManager : MonoBehaviour
 {
@@ -41,12 +45,22 @@ public class LevelPanelManager : MonoBehaviour
     public GameObject subPanel;
     public Button subPanelCloseButton;
 
+    [Header("Sub Order")]
+    public GameObject subOrder1;
+    public Button orderButton;
+
     [Header("Профиль")]
     public GameObject profile;
 
-    private void Start()
+    private FirebaseFirestore db;
+    private bool isSubscribed = false;
+    private bool hasOpenedSubPanelOnce = false;
+
+    private async void Start()
     {
-        // Скрыть все окна
+        db = FirebaseFirestore.DefaultInstance;
+
+        // Отключаем все UI сразу
         levelPanel?.SetActive(false);
         AcceptTherory?.SetActive(false);
         AcceptLevel2?.SetActive(false);
@@ -54,18 +68,28 @@ public class LevelPanelManager : MonoBehaviour
         AcceptTheoryLevel2?.SetActive(false);
         AcceptTheoryLevel3?.SetActive(false);
         subPanel?.SetActive(false);
+        subOrder1?.SetActive(false);
 
-        // Level Panel
+        // Получаем текущего пользователя
+        string userId = FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            DocumentSnapshot snapshot = await db.Collection("users").Document(userId).GetSnapshotAsync();
+            if (snapshot.Exists && snapshot.ContainsField("subscription"))
+            {
+                isSubscribed = snapshot.GetValue<bool>("subscription");
+            }
+        }
+
+        // Назначение слушателей после проверки подписки
         levelButtonObject?.GetComponent<Button>()?.onClick.AddListener(OpenLevelPanel);
         cancelButton?.onClick.AddListener(CloseLevelPanel);
         goToLevelButton?.onClick.AddListener(() => LoadScene("LevelTheory1"));
 
-        // Level 1
         TheoryLevel1?.GetComponent<Button>()?.onClick.AddListener(OpenAcceptTheroryPanel);
         TheoryCancel?.onClick.AddListener(CloseAcceptTheroryPanel);
         TheoryAccept?.onClick.AddListener(() => LoadScene("Theory2"));
 
-        // Level 2
         level2?.GetComponent<Button>()?.onClick.AddListener(OpenAcceptLevel2Panel);
         Level2Cancel?.onClick.AddListener(CloseAcceptLevel2Panel);
         Level2Accept?.onClick.AddListener(() => LoadScene("LevelTheory2"));
@@ -73,7 +97,6 @@ public class LevelPanelManager : MonoBehaviour
         Theory2Cancel?.onClick.AddListener(CloseAcceptTheoryLevel2Panel);
         Theory2Accept?.onClick.AddListener(() => LoadScene("Theory2-1"));
 
-        // Level 3
         level3?.GetComponent<Button>()?.onClick.AddListener(OpenAcceptLevel3Panel);
         Level3Cancel?.onClick.AddListener(CloseAcceptLevel3Panel);
         Level3Accept?.onClick.AddListener(() => LoadScene("LevelTheory3"));
@@ -81,11 +104,10 @@ public class LevelPanelManager : MonoBehaviour
         Theory3Cancel?.onClick.AddListener(CloseAcceptTheoryLevel3Panel);
         Theory3Accept?.onClick.AddListener(() => LoadScene("Theory3-1"));
 
-        // Level 4
         level4?.GetComponent<Button>()?.onClick.AddListener(OpenSubPanel);
         subPanelCloseButton?.onClick.AddListener(CloseSubPanel);
 
-        // Профиль
+        orderButton?.onClick.AddListener(OpensubOrder1Panel);
         profile?.GetComponent<Button>()?.onClick.AddListener(() => LoadScene("Profile"));
     }
 
@@ -110,8 +132,27 @@ public class LevelPanelManager : MonoBehaviour
     public void CloseAcceptTheoryLevel3Panel() => AcceptTheoryLevel3?.SetActive(false);
 
     // Level 4
-    public void OpenSubPanel() => subPanel?.SetActive(true);
+    public void OpenSubPanel()
+    {
+        if (!isSubscribed && !hasOpenedSubPanelOnce)
+        {
+            subPanel?.SetActive(true);
+            hasOpenedSubPanelOnce = true;
+        }
+    }
+
     public void CloseSubPanel() => subPanel?.SetActive(false);
+
+    // Sub Order
+    public void OpensubOrder1Panel()
+    {
+        if (!isSubscribed)
+        {
+            subOrder1?.SetActive(true);
+        }
+    }
+
+    public void ClosesubOrder1Panel() => subOrder1?.SetActive(false);
 
     // Переход на сцену
     public void LoadScene(string sceneName)
