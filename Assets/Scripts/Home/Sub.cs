@@ -37,7 +37,7 @@ public class SubscriptionManager : MonoBehaviour
     public Button saveCardButton;
     public Button confirmSubscriptionButton;
     public Button closeCardPanelButton;
-    public Button closePayPanelButton; // Новая кнопка для закрытия payPanel
+    public Button closePayPanelButton;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -45,6 +45,8 @@ public class SubscriptionManager : MonoBehaviour
     private bool suppressCallback = false;
     private bool justActivated = false;
     private DateTime subscriptionEndTime;
+
+    private string secretKey = "f9168c5e-ceb2-4faa-b6bf-329bf39fa1e4";
 
     void Start()
     {
@@ -56,7 +58,6 @@ public class SubscriptionManager : MonoBehaviour
         cvvInput.onValueChanged.AddListener(MaskCVV);
         fullNameInput.onValueChanged.AddListener(MaskFullName);
 
-        // Убедимся, что все панели скрыты при старте, кроме payPanel
         subOrderPanel.SetActive(false);
         cardPanel.SetActive(false);
 
@@ -75,14 +76,8 @@ public class SubscriptionManager : MonoBehaviour
         paymentDropdown.onValueChanged.AddListener(OnPaymentOptionChanged);
         saveCardButton.onClick.AddListener(OnSaveCardClick);
         confirmSubscriptionButton.onClick.AddListener(OnConfirmSubscriptionClick);
-        closeCardPanelButton.onClick.AddListener(() =>
-        {
-            cardPanel.SetActive(false);
-        });
-        closePayPanelButton.onClick.AddListener(() =>
-        {
-            subOrderPanel.SetActive(false); // Закрываем только subOrderPanel
-        });
+        closeCardPanelButton.onClick.AddListener(() => { cardPanel.SetActive(false); });
+        closePayPanelButton.onClick.AddListener(() => { subOrderPanel.SetActive(false); });
 
         cardNumberError.gameObject.SetActive(false);
         expiryError.gameObject.SetActive(false);
@@ -93,7 +88,6 @@ public class SubscriptionManager : MonoBehaviour
         PopulateSubscriptionPlans();
         _ = CheckActiveCards();
 
-        // Вызов метода для установки начальной суммы в лейбл
         OnSubscriptionPlanChanged(subscriptionDropdown.value);
     }
 
@@ -178,14 +172,13 @@ public class SubscriptionManager : MonoBehaviour
         string cvv = cvvInput.text.Trim();
         string fullName = fullNameInput.text.Trim();
 
-        bool isValid = true;
-
         cardNumberError.gameObject.SetActive(cardNum.Length != 16);
-        expiryError.gameObject.SetActive(!Regex.IsMatch(expiry, @"^\d{2}/\d{2}\$"));
+        expiryError.gameObject.SetActive(!Regex.IsMatch(expiry, @"^\d{2}/\d{2}$"));
         cvvError.gameObject.SetActive(cvv.Length != 3);
-        nameError.gameObject.SetActive(!Regex.IsMatch(fullName, @"^[A-Za-zА-Яа-яЁё]+\s[A-Za-zА-Яа-яЁё]+\$"));
+        nameError.gameObject.SetActive(!Regex.IsMatch(fullName, @"^[A-Za-zА-Яа-яЁё]+\s[A-Za-zА-Яа-яЁё]+$"));
 
-        if (!isValid) return;
+        if (cardNum.Length != 16 || !Regex.IsMatch(expiry, @"^\d{2}/\d{2}$") || cvv.Length != 3 || !Regex.IsMatch(fullName, @"^[A-Za-zА-Яа-яЁё]+\s[A-Za-zА-Яа-яЁё]+$"))
+            return;
 
         FirebaseUser user = auth.CurrentUser;
         if (user == null) return;
@@ -194,7 +187,7 @@ public class SubscriptionManager : MonoBehaviour
         {
             { "number", cardNum },
             { "expiry", expiry },
-            { "cvv", cvv },
+            { "cvv", EncryptDecrypt(cvv) },
             { "name", fullName },
             { "balance", 5000 }
         };
@@ -245,13 +238,16 @@ public class SubscriptionManager : MonoBehaviour
 
         selectedCard["balance"] = balance - price;
 
+        DateTime endTime = DateTime.UtcNow.AddDays(duration);
+        subscriptionEndTime = endTime;
+
         DocumentReference userDoc = db.Collection("users").Document(user.UserId);
 
         await userDoc.UpdateAsync(new Dictionary<string, object>
         {
             { "cards", userCards },
             { "subscription", true },
-            { "subscriptionEndTime", DateTime.UtcNow.AddDays(duration).ToString() }
+            { "subscriptionEndTime", Timestamp.FromDateTime(endTime) }
         });
 
         subscriptionErrorLabel.text = "Подписка активирована!";
@@ -260,16 +256,15 @@ public class SubscriptionManager : MonoBehaviour
         subOrderPanel.SetActive(false);
         justActivated = true;
 
-        subscriptionEndTime = DateTime.UtcNow.AddDays(duration);
-        InvokeRepeating("CheckSubscriptionExpiry", 0f, 60f); // Проверяем каждую минуту
+        InvokeRepeating("CheckSubscriptionExpiry", 0f, 60f);
     }
 
     void CheckSubscriptionExpiry()
     {
         if (DateTime.UtcNow >= subscriptionEndTime)
         {
-            _ = DeactivateSubscription();
             CancelInvoke("CheckSubscriptionExpiry");
+            _ = DeactivateSubscription();
         }
     }
 
@@ -282,18 +277,17 @@ public class SubscriptionManager : MonoBehaviour
 
         await userDoc.UpdateAsync(new Dictionary<string, object>
         {
-            { "subscription", false }
+            { "subscription", false },
+            { "subscriptionEndTime", null }
         });
+
+        Debug.Log("📴 Подписка деактивирована.");
     }
 
     async Task CheckSubscriptionStatus()
     {
         FirebaseUser user = auth.CurrentUser;
-        if (user == null)
-        {
-            Debug.Log("User is not logged in.");
-            return;
-        }
+        if (user == null) return;
 
         DocumentSnapshot snapshot = await db.Collection("users").Document(user.UserId).GetSnapshotAsync();
 
@@ -303,21 +297,15 @@ public class SubscriptionManager : MonoBehaviour
 
         if (isSubscribed && snapshot.ContainsField("subscriptionEndTime"))
         {
-            string endTimeStr = snapshot.GetValue<string>("subscriptionEndTime");
-            if (DateTime.TryParse(endTimeStr, out DateTime endTime))
-            {
-                subscriptionEndTime = endTime;
-                InvokeRepeating("CheckSubscriptionExpiry", 0f, 60f);
-            }
+            Timestamp ts = snapshot.GetValue<Timestamp>("subscriptionEndTime");
+            subscriptionEndTime = ts.ToDateTime();
+            InvokeRepeating("CheckSubscriptionExpiry", 0f, 60f);
         }
 
         if (justActivated)
         {
             justActivated = false;
         }
-
-        // Показываем subOrderPanel, если подписка не активна
-        subOrderPanel.SetActive(!isSubscribed);
     }
 
     public void MaskFullName(string input)
@@ -329,13 +317,8 @@ public class SubscriptionManager : MonoBehaviour
         if (spaceIndex != -1)
         {
             string beforeSpace = cleaned.Substring(0, spaceIndex);
-            string afterSpace = cleaned.Substring(spaceIndex + 1);
-            afterSpace = afterSpace.Replace(" ", "");
+            string afterSpace = cleaned.Substring(spaceIndex + 1).Replace(" ", "");
             cleaned = beforeSpace + " " + afterSpace;
-
-            int secondSpace = afterSpace.IndexOf(' ');
-            if (secondSpace != -1)
-                cleaned = beforeSpace + " " + afterSpace.Substring(0, secondSpace);
         }
 
         if (input != cleaned)
@@ -402,5 +385,14 @@ public class SubscriptionManager : MonoBehaviour
             cardNumberInput.caretPosition = caretPos;
             cardNumberInput.stringPosition = caretPos;
         }
+    }
+
+    private string EncryptDecrypt(string text)
+    {
+        char[] key = secretKey.ToCharArray();
+        char[] input = text.ToCharArray();
+        for (int i = 0; i < input.Length; i++)
+            input[i] ^= key[i % key.Length];
+        return new string(input);
     }
 }

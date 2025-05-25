@@ -133,13 +133,13 @@ public class LevelPanelManager : MonoBehaviour
 
     // Level 4
     public void OpenSubPanel()
+{
+    if (!isSubscribed)
     {
-        if (!isSubscribed && !hasOpenedSubPanelOnce)
-        {
-            subPanel?.SetActive(true);
-            hasOpenedSubPanelOnce = true;
-        }
+        subPanel?.SetActive(true);
     }
+}
+
 
     public void CloseSubPanel() => subPanel?.SetActive(false);
 
