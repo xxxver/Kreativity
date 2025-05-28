@@ -3730,6 +3730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cancelButton: {fileID: 584313342}
+  targetProgressValue: 0.5
 --- !u!114 &883213192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4892,7 +4893,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u043E\u043B\u043E\u0434\u0435\u0446, \u0442\u044B \u0441\u043F\u0430\u0440\u0430\u0432\u0438\u043B\u0441\u044F!
+  m_text: "\u041C\u043E\u043B\u043E\u0434\u0435\u0446, \u0442\u044B \u0441\u043F\u0440\u0430\u0432\u0438\u043B\u0441\u044F!
     \u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u043C?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

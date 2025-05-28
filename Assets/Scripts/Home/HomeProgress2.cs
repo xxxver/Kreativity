@@ -6,6 +6,7 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class ProgressBarManager2 : MonoBehaviour
 {
     public Slider progressBar;
@@ -28,6 +29,17 @@ public class ProgressBarManager2 : MonoBehaviour
     {
         if (progressUIRoot != null)
             progressUIRoot.SetActive(false); // UI скрыт до загрузки
+
+        if (progressBar != null)
+        {
+            progressBar.interactable = false;
+
+            CanvasGroup cg = progressBar.GetComponent<CanvasGroup>();
+            if (cg == null)
+                cg = progressBar.gameObject.AddComponent<CanvasGroup>();
+
+            cg.blocksRaycasts = false;
+        }
     }
 
     void Start()
@@ -38,14 +50,12 @@ public class ProgressBarManager2 : MonoBehaviour
         db = FirebaseFirestore.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
 
-        // 1. Локальные данные
         float localProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
         ApplyProgressToUI(localProgress);
 
         if (progressUIRoot != null)
-            progressUIRoot.SetActive(true); // UI появляется сразу
+            progressUIRoot.SetActive(true); // UI появляется после загрузки локального прогресса
 
-        // 2. Обновление из Firestore
         LoadProgress();
     }
 

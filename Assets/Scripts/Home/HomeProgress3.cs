@@ -6,6 +6,7 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class ProgressBarManager3 : MonoBehaviour
 {
     public Slider progressBar;
@@ -23,6 +24,20 @@ public class ProgressBarManager3 : MonoBehaviour
     private const string levelKey = "LevelProgress3";
     private const string PlayerPrefsKey = "LevelProgress3_Local";
 
+    private void Awake()
+    {
+        if (progressBar != null)
+        {
+            progressBar.interactable = false;
+
+            CanvasGroup cg = progressBar.GetComponent<CanvasGroup>();
+            if (cg == null)
+                cg = progressBar.gameObject.AddComponent<CanvasGroup>();
+
+            cg.blocksRaycasts = false;
+        }
+    }
+
     void Start()
     {
         if (theoryButtonObject != null)
@@ -31,11 +46,9 @@ public class ProgressBarManager3 : MonoBehaviour
         db = FirebaseFirestore.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
 
-        // 1. Сначала отображаем локальный кеш, если есть
         float localProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
         ApplyProgress(localProgress);
 
-        // 2. Асинхронно грузим прогресс из Firestore
         LoadProgress();
     }
 
@@ -67,7 +80,6 @@ public class ProgressBarManager3 : MonoBehaviour
                 await docRef.SetAsync(new Dictionary<string, object> { { levelKey, progress } }, SetOptions.MergeAll);
             }
 
-            // Если пришло обновлённое значение — обновляем PlayerPrefs и UI
             float cachedProgress = PlayerPrefs.GetFloat(PlayerPrefsKey, 0f);
             if (!Mathf.Approximately(progress, cachedProgress))
             {
@@ -86,6 +98,7 @@ public class ProgressBarManager3 : MonoBehaviour
     {
         if (progressBar != null)
             progressBar.value = progress;
+
         UpdateProgressText(progress);
         CheckUnlockTheory(progress);
     }
@@ -123,9 +136,6 @@ public class ProgressBarManager3 : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Очистить локальный кеш прогресса (например, при смене аккаунта)
-    /// </summary>
     public static void ClearCachedProgress()
     {
         PlayerPrefs.DeleteKey(PlayerPrefsKey);
