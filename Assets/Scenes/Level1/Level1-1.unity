@@ -3422,8 +3422,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -9.162598, y: 25.86}
-  m_SizeDelta: {x: 1302.36, y: 910.09}
+  m_AnchoredPosition: {x: -9.162598, y: -16.88}
+  m_SizeDelta: {x: 1302.36, y: 995.57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1004401229
 MonoBehaviour:
@@ -6596,6 +6596,7 @@ MonoBehaviour:
   logoutButton: {fileID: 1892168526}
   toggleButton: {fileID: 1171243941}
   settingsPanel: {fileID: 220580520}
+  subscriptionDateLabel: {fileID: 0}
 --- !u!1 &1825852252
 GameObject:
   m_ObjectHideFlags: 0
